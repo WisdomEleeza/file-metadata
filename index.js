@@ -1,8 +1,22 @@
 var express = require("express");
 var cors = require("cors");
-const multer = require('multer')
-
+const multer = require("multer");
+const mongoose = require("mongoose");
 require("dotenv").config();
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTolopology: true,
+    });
+    console.log("Database connected");
+  } catch (error) {
+    console.log("Failed to connect to Database", error);
+  }
+};
+
+connectDB()
 
 var app = express();
 
