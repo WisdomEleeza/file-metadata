@@ -20,7 +20,7 @@ const connectDB = async () => {
 connectDB();
 
 const imageFileSchema = new Schema({
-  image: {
+  upfile: {
     type: String,
   },
 });
@@ -40,6 +40,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+module.exports = upload;
 
 var app = express();
 
@@ -50,6 +51,10 @@ app.use("/public", express.static(process.cwd() + "/public"));
 app.get("/", function (req, res) {
   res.sendFile(process.cwd() + "/views/index.html");
 });
+
+app.post('/upload', upload.single("upfile"), async (req, res) => {
+  
+})
 
 const port = process.env.PORT || 3000;
 app.listen(port, function () {
