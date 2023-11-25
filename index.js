@@ -1,6 +1,6 @@
 require("dotenv").config();
-var express = require("express");
-var cors = require("cors");
+const express = require("express");
+const cors = require("cors");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
@@ -13,7 +13,7 @@ const connectDB = async () => {
     });
     console.log("Database connected");
   } catch (error) {
-    console.log("Failed to connect to Database", error);
+    console.error("Failed to connect to Database", error);
   }
 };
 
@@ -26,12 +26,11 @@ const imageFileSchema = new Schema({
 });
 
 const Image = mongoose.model("Image", imageFileSchema);
-module.exports = Image;
 
-//Multer Configuration
+// Multer Configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "/uploads");
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -40,9 +39,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-module.exports = upload;
 
-var app = express();
+const app = express();
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -52,19 +50,29 @@ app.get("/", function (req, res) {
   res.sendFile(process.cwd() + "/views/index.html");
 });
 
+// Handling file upload
 app.post("/upload", upload.single("upfile"), async (req, res) => {
   try {
+    // Access uploaded file details
     const { filename, originalname, size, mimetype } = req.file;
 
+    // Create a new document in the Image model
     const newImage = new Image({
       upfile: filename,
     });
 
+    // Save the document to MongoDB
     await newImage.save();
 
-    res.json({ filename, originalname, size, mimetype });
+    // Respond with JSON containing file details
+    res.json({
+      name: filename,
+      type: mimetype,
+      size: size,
+    });
   } catch (error) {
-    console.error("Error uploading file", error);
+    console.error("Error uploading file:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
