@@ -51,7 +51,7 @@ app.get("/", function (req, res) {
 });
 
 // Handling file upload
-app.post("/upload", upload.single("upfile"), async (req, res) => {
+app.post("/api/fileanalyse", upload.single("upfile"), async (req, res) => {
   try {
     // Access uploaded file details
     const { filename, originalname, size, mimetype } = req.file;
