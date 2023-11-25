@@ -66,7 +66,7 @@ app.post("/api/fileanalyse", upload.single("upfile"), async (req, res) => {
 
     // Respond with JSON containing file details
     res.json({
-      name: filename,
+      name: originalname,
       type: mimetype,
       size: size,
     });
