@@ -52,9 +52,21 @@ app.get("/", function (req, res) {
   res.sendFile(process.cwd() + "/views/index.html");
 });
 
-app.post('/upload', upload.single("upfile"), async (req, res) => {
-  
-})
+app.post("/upload", upload.single("upfile"), async (req, res) => {
+  try {
+    const { filename, originalname, size } = req.file;
+
+    const newImage = new Image({
+      upfile: filename,
+    });
+
+    await newImage.save();
+
+    res.json({ filename, originalname, size });
+  } catch (error) {
+    console.error("Error uploading file", error);
+  }
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, function () {
