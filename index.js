@@ -3,20 +3,34 @@ var cors = require("cors");
 const multer = require("multer");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const Schema = mongoose.Schema;
 
 const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTolopology: true,
-    });
-    console.log("Database connected");
-  } catch (error) {
-    console.log("Failed to connect to Database", error);
-  }
+  const mongoose = require("mongoose");
+
+  const connectDB = async () => {
+    try {
+      await mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      console.log("Database connected");
+    } catch (error) {
+      console.log("Failed to connect to Database", error);
+    }
+  };
 };
 
-connectDB()
+connectDB();
+
+const imageFileSchema = new mongoose.Schema({
+  image: {
+    type: String, 
+  },
+});
+
+const Image = mongoose.model("Image", imageFileSchema); 
+module.exports = Image;
 
 var app = express();
 
