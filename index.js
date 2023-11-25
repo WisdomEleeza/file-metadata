@@ -30,7 +30,14 @@ const Image = mongoose.model("Image", imageFileSchema);
 // Multer Configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    const uploadPath = "uploads/";
+
+    // Check if the 'uploads' directory exists, if not, create it
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath);
+    }
+
+    cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -57,12 +64,12 @@ app.post("/api/fileanalyse", upload.single("upfile"), async (req, res) => {
     const { originalname, size, mimetype } = req.file;
 
     // Create a new document in the Image model
-    // const newImage = new Image({
-    //   upfile: originalname,
-    // });
+    const newImage = new Image({
+      upfile: originalname,
+    });
 
     // Save the document to MongoDB
-    // await newImage.save();
+    await newImage.save();
 
     // Respond with JSON containing file details
     res.json({
