@@ -54,15 +54,15 @@ app.get("/", function (req, res) {
 
 app.post("/upload", upload.single("upfile"), async (req, res) => {
   try {
-    const { name, type, size } = req.file;
+    const { filename, originalname, size, mimetype } = req.file;
 
     const newImage = new Image({
-      upfile: name,
+      upfile: filename,
     });
 
     await newImage.save();
 
-    res.json({ name, type, size });
+    res.json({ filename, originalname, size, mimetype });
   } catch (error) {
     console.error("Error uploading file", error);
   }
