@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
+const fs = require("fs");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
