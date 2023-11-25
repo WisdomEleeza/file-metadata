@@ -54,11 +54,11 @@ app.get("/", function (req, res) {
 app.post("/api/fileanalyse", upload.single("upfile"), async (req, res) => {
   try {
     // Access uploaded file details
-    const { filename, originalname, size, mimetype } = req.file;
+    const { originalname, size, mimetype } = req.file;
 
     // Create a new document in the Image model
     const newImage = new Image({
-      upfile: filename,
+      upfile: originalname,
     });
 
     // Save the document to MongoDB
