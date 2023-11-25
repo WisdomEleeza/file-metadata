@@ -1,9 +1,9 @@
+require("dotenv").config();
 var express = require("express");
 var cors = require("cors");
 const multer = require("multer");
 const mongoose = require("mongoose");
-require("dotenv").config();
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const connectDB = async () => {
   try {
@@ -19,7 +19,7 @@ const connectDB = async () => {
 
 connectDB();
 
-const imageFileSchema = new mongoose.Schema({
+const imageFileSchema = new Schema({
   image: {
     type: String,
   },
